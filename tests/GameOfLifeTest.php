@@ -160,4 +160,51 @@ class GameOfLifeTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($nextGrid, $gameOfLife->getGrid());
     }
+
+    /**
+     * @covers \Ikslakurd\GameOfLife\GameOfLife::play
+     *
+     * @expectedException \InvalidArgumentException
+     */
+    public function testExceptionIsRaisedForInvalidPlayMethodArgument()
+    {
+        $grid = array(
+            array(true, true, false),
+            array(false, true, false),
+            array(false, false, false)
+        );
+        $gameOfLife = new GameOfLife($grid);
+
+        $gameOfLife->play(0);
+    }
+
+    /**
+     * @covers \Ikslakurd\GameOfLife\GameOfLife::play
+     */
+    public function testCanBePlayed()
+    {
+        $grid = array(
+            array(false, true, false, false, false, false),
+            array(false, false, true, false, false, false),
+            array(true, true, true, false, false, false),
+            array(false, false, false, false, false, false),
+            array(false, false, false, false, false, false),
+            array(false, false, false, false, false, false)
+        );
+        $gameOfLife = new GameOfLife($grid);
+
+        $lifecycles = 2;
+        $gameOfLife->play($lifecycles);
+
+        $expectedGrid = array(
+            array(false, false, false, false, false, false),
+            array(false, false, true, false, false, false),
+            array(true, false, true, false, false, false),
+            array(false, true, true, false, false, false),
+            array(false, false, false, false, false, false),
+            array(false, false, false, false, false, false)
+        );
+
+        $this->assertSame($expectedGrid, $gameOfLife->getGrid());
+    }
 }

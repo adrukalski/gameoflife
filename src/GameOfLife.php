@@ -129,4 +129,20 @@ class GameOfLife
 
         $this->setGrid($grid);
     }
+
+    /**
+     * @param int $lifecycles
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function play($lifecycles)
+    {
+        if (!is_int($lifecycles) || (0 >= $lifecycles)) {
+            throw new \InvalidArgumentException("Parameter must be a positive integer");
+        }
+
+        for ($i = 0; $i < $lifecycles; $i++) {
+            $this->next();
+        }
+    }
 }
