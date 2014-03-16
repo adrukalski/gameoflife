@@ -61,4 +61,41 @@ class GameOfLifeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $gameOfLife->countLiveNeighbours(2, 1));
         $this->assertEquals(1, $gameOfLife->countLiveNeighbours(2, 2));
     }
+
+    /**
+     * @covers \Ikslakurd\GameOfLife\GameOfLife::cellLives
+     *
+     * @expectedException \InvalidArgumentException
+     */
+    public function testExceptionIsRaisedForInvalidCellLivesArguments()
+    {
+        $grid = array();
+        $gameOfLife = new GameOfLife($grid);
+
+        $gameOfLife->cellLives("foo", "bar");
+    }
+
+    /**
+     * @covers \Ikslakurd\GameOfLife\GameOfLife::cellLives
+     */
+    public function testCellLivesCanBeDetermined()
+    {
+        $grid = array(
+            array(true, true, false),
+            array(false, true, false),
+            array(false, false, false)
+        );
+
+        $gameOfLife = new GameOfLife($grid);
+
+        $this->assertEquals(true, $gameOfLife->cellLives(0, 0));
+        $this->assertEquals(true, $gameOfLife->cellLives(0, 1));
+        $this->assertEquals(false, $gameOfLife->cellLives(0, 2));
+        $this->assertEquals(true, $gameOfLife->cellLives(1, 0));
+        $this->assertEquals(true, $gameOfLife->cellLives(1, 1));
+        $this->assertEquals(false, $gameOfLife->cellLives(1, 2));
+        $this->assertEquals(false, $gameOfLife->cellLives(2, 0));
+        $this->assertEquals(false, $gameOfLife->cellLives(2, 1));
+        $this->assertEquals(false, $gameOfLife->cellLives(2, 2));
+    }
 }

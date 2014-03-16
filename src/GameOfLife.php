@@ -18,7 +18,24 @@ class GameOfLife
     }
 
     /**
-     * Counts the number of live neighbours.
+     * Checks that coordinates are integer values.
+     *
+     * @param int $xCoordinate
+     * @param int $yCoordinate
+     *
+     * @return bool
+     */
+    protected function checkCoordinates($xCoordinate, $yCoordinate)
+    {
+        if (!is_int($xCoordinate) || !is_int($yCoordinate)) {
+            throw new \InvalidArgumentException("Coordinates must be integers");
+        }
+
+        return true;
+    }
+
+    /**
+     * Counts the number of live neighbours of a given cell.
      *
      * @param $xCoordinate
      * @param $yCoordinate
@@ -29,9 +46,7 @@ class GameOfLife
      */
     public function countLiveNeighbours($xCoordinate, $yCoordinate)
     {
-        if (!is_int($xCoordinate) || !is_int($yCoordinate)) {
-            throw new \InvalidArgumentException("Coordinates must be integers");
-        }
+        $this->checkCoordinates($xCoordinate, $yCoordinate);
 
         $count = 0;
 
@@ -55,5 +70,29 @@ class GameOfLife
         }
 
         return $count;
+    }
+
+    /**
+     * Determines if a cell lives (or dies).
+     *
+     * @param $xCoordinate
+     * @param $yCoordinate
+     *
+     * @return bool
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function cellLives($xCoordinate, $yCoordinate)
+    {
+        $this->checkCoordinates($xCoordinate, $yCoordinate);
+
+        $count = $this->countLiveNeighbours($xCoordinate, $yCoordinate);
+
+        // current state = alive
+        if ($this->grid[$xCoordinate][$yCoordinate]) {
+            return ($count >= 2 && $count <= 3);
+        }
+
+        return $count == 3;
     }
 }
