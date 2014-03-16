@@ -18,6 +18,22 @@ class GameOfLife
     }
 
     /**
+     * @return array
+     */
+    public function getGrid()
+    {
+        return $this->grid;
+    }
+
+    /**
+     * @param array $grid
+     */
+    public function setGrid(array $grid)
+    {
+        $this->grid = $grid;
+    }
+
+    /**
      * Checks that coordinates are integer values.
      *
      * @param int $xCoordinate
@@ -94,5 +110,23 @@ class GameOfLife
         }
 
         return $count == 3;
+    }
+
+    /**
+     * Creates next generation.
+     */
+    public function next()
+    {
+        $grid = $this->getGrid();
+
+        $xSize = count($grid);
+        for ($i = 0; $i < $xSize; $i++) {
+            $ySize = count($grid[$i]);
+            for ($j = 0; $j < $ySize; $j++) {
+                $grid[$i][$j] = $this->cellLives($i, $j);
+            }
+        }
+
+        $this->setGrid($grid);
     }
 }

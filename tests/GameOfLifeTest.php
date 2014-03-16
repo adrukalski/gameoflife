@@ -26,6 +26,43 @@ class GameOfLifeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers \Ikslakurd\GameOfLife\GameOfLife::get
+     */
+    public function testGridCanBeRetrieved()
+    {
+        $grid = array(
+            array(true, true, false),
+            array(false, true, false),
+            array(false, false, false)
+        );
+        $gameOfLife = new GameOfLife($grid);
+
+        $this->assertSame($grid, $gameOfLife->getGrid());
+    }
+
+    /**
+     * @covers \Ikslakurd\GameOfLife\GameOfLife::set
+     */
+    public function testGridCanBeSet()
+    {
+        $grid = array(
+            array(true, true, false),
+            array(false, true, false),
+            array(false, false, false)
+        );
+        $gameOfLife = new GameOfLife($grid);
+
+        $newGrid = array(
+            array(false, false, false),
+            array(true, true, false),
+            array(false, true, false)
+        );
+        $gameOfLife->setGrid($newGrid);
+
+        $this->assertSame($newGrid, $gameOfLife->getGrid());
+    }
+
+    /**
      * @covers \Ikslakurd\GameOfLife\GameOfLife::countLiveNeighbours
      *
      *  @expectedException \InvalidArgumentException
@@ -48,7 +85,6 @@ class GameOfLifeTest extends \PHPUnit_Framework_TestCase
             array(false, true, false),
             array(false, false, false)
         );
-
         $gameOfLife = new GameOfLife($grid);
 
         $this->assertEquals(2, $gameOfLife->countLiveNeighbours(0, 0));
@@ -85,7 +121,6 @@ class GameOfLifeTest extends \PHPUnit_Framework_TestCase
             array(false, true, false),
             array(false, false, false)
         );
-
         $gameOfLife = new GameOfLife($grid);
 
         $this->assertEquals(true, $gameOfLife->cellLives(0, 0));
@@ -97,5 +132,32 @@ class GameOfLifeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(false, $gameOfLife->cellLives(2, 0));
         $this->assertEquals(false, $gameOfLife->cellLives(2, 1));
         $this->assertEquals(false, $gameOfLife->cellLives(2, 2));
+    }
+
+    /**
+     * @covers \Ikslakurd\GameOfLife\GameOfLife::next
+     */
+    public function testNextGenerationCanBeCreated()
+    {
+        $grid = array(
+            array(false, false, false, false, false),
+            array(false, false, false, false, false),
+            array(false, true, true, true, false),
+            array(false, false, false, false, false),
+            array(false, false, false, false, false)
+        );
+        $gameOfLife = new GameOfLife($grid);
+
+        $gameOfLife->next();
+
+        $nextGrid = array(
+            array(false, false, false, false, false),
+            array(false, false, true, false, false),
+            array(false, false, true, false, false),
+            array(false, false, true, false, false),
+            array(false, false, false, false, false)
+        );
+
+        $this->assertSame($nextGrid, $gameOfLife->getGrid());
     }
 }
